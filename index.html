@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>进度条</title>
+</head>
+
+<body>
+    <script src='js/jquery.min.js'></script>
+    <script src="js/jquery.progressBar.js"></script>
+    <input type="file" />
+    <script>
+        //使用方式: 1.引入 jquery以及jquery.progressBar.js 
+        //2. ajax中加入 xhr: xhrOnProgress(function(e) {getProgress(e.loaded / e.total * 100 - 10)}),后台返回成功之后设置为100
+        /**案例1
+         *通过base64上传方式图片
+         */
+        // $('input[type=file]').change(function() {
+        //     var reader = new FileReader();
+        //     reader.onload = function() {
+        //         var base64 = 'png@' + reader.result
+        //         $.ajax({
+        //             url: 'test',
+        //             type: 'POST',
+        //             dataType: "json",
+        //             data: {
+        //                 session: '943ca6d4eeec4bfea13d77d8025582d4',
+        //                 file: base64
+        //             },
+        //             xhr: xhrOnProgress(function(e) {
+        //                 getProgress(e.loaded / e.total * 100 - 10)
+        //             }),
+        //             success: function(res) {
+        //                 getProgress(100)
+
+        //             }
+        //         })
+        //     }
+        //     reader.readAsDataURL(this.files[0])
+        // })
+
+
+        /**案例2
+         *通过表单上传方式	
+         */
+        $('input[type=file]').change(function(e) {
+            let formdata = new FormData();
+            formdata.append('session', '943ca6d4eeec4bfea13d77d8025582d4');
+            formdata.append('file', e.target.files[0]);
+            $.ajax({
+                url: 'test',
+                type: 'POST',
+                data: formdata,
+                processData: false,
+                contentType: false,
+                xhr: xhrOnProgress(function(e) {
+                    getProgress(e.loaded / e.total * 100 - 10)
+                }),
+                success: function(res) {
+                    getProgress(100)
+                }
+            })
+        })
+    </script>
+</body>
